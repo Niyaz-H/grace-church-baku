@@ -1,0 +1,64 @@
+{
+  "church": {
+    "name": "Grace Church Baku",
+    "address": {
+      "street": "89 Gara Garayev Avenue",
+      "city": "Nizami, Baku",
+      "country": "Azerbaijan",
+      "postalCode": ""
+    },
+    "phone": "+994 55 940 99 11",
+    "email": "ggbakumusic@gmail.com",
+    "socialMedia": {
+      "facebook": {
+        "name": "Grace Church Baku",
+        "url": "https://www.facebook.com/profile.php?id=61554018077972/"
+      },
+      "youtube": {
+        "name": "@grace-church-8km",
+        "url": "https://www.youtube.com/@grace-church-8km/"
+      },
+      "tiktok": {
+        "name": "@gracechurch.az",
+        "url": "https://www.tiktok.com/@gracechurch.az/"
+      },
+      "instagram": {
+        "name": "@gracechurchbaku",
+        "url": "https://www.instagram.com/gracechurchbaku/"
+      }
+    },
+    "officeHours": {
+      "weekdays": "Monday - Friday: 9:00 AM - 5:00 PM",
+      "saturday": "Saturday: 10:00 AM - 2:00 PM",
+      "sunday": "Sunday: Closed"
+    },
+    "description": {
+      "az": "Rəbb İsa Məsihin \"Bitirilmiş İş\" müjdəsini və Tanrının lütf kəlamını Bakı şəhərində və Azərbaycanın regionlarında bəyan edən \"Lütf\" kilsəsi",
+      "ru": "Церковь \"Благодать\" посвящена провозглашению Евангелия о \"Завершённой Работе\" Иисуса Христа и распространению благое вести о Божьей благодати в Баку и по регионам Азербайджана.",
+      "en": "Grace Church is dedicated to proclaiming the Gospel of Jesus Christ’s \"Finished Work\" and sharing the message of God’s grace throughout Baku and across the regions of Azerbaijan."
+    },
+    "serviceTimes": {
+      "az": "Toplantılar həftədə 2 dəfə keçirilir",
+      "ru": "Богослужения проводятся два раза в неделю",
+      "en": "Services are held twice a week",
+      "schedule": [
+        {
+          "day": {
+            "az": "Bazar günü",
+            "ru": "Воскресенье",
+            "en": "Sunday"
+          },
+          "time": "18:00"
+        },
+        {
+          "day": {
+            "az": "Çər. Axşamı (3cü gün)",
+            "ru": "Среда",
+            "en": "Wednesday"
+          },
+          "time": "19:00"
+        }
+      ]
+    }
+  }
+}
