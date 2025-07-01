@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Globe } from 'lucide-react'
+import { useTranslation } from '@/contexts/LanguageContext'
 
 const languages = [
   { code: 'az', name: 'Azərbaycan' },
@@ -10,7 +11,7 @@ const languages = [
 
 const LanguageSelector = () => {
   const [isOpen, setIsOpen] = useState(false)
-  const [selectedLanguage, setSelectedLanguage] = useState(languages[0])
+  const { language, setLanguage } = useTranslation()
   const [inHeroSection, setInHeroSection] = useState(true)
 
   useEffect(() => {
@@ -40,7 +41,7 @@ const LanguageSelector = () => {
         whileTap={{ scale: 0.95 }}
       >
         <Globe className="w-5 h-5" />
-        <span>{selectedLanguage.code.toUpperCase()}</span>
+        <span>{language.toUpperCase()}</span>
       </motion.button>
       <AnimatePresence>
         {isOpen && (
@@ -54,7 +55,7 @@ const LanguageSelector = () => {
               <button
                 key={lang.code}
                 onClick={() => {
-                  setSelectedLanguage(lang)
+                  setLanguage(lang.code as 'en' | 'az' | 'ru')
                   setIsOpen(false)
                 }}
                 className={`w-full text-left px-4 py-2 hover:bg-white/30 dark:hover:bg-white/10 transition-colors ${getTextColor()}`}

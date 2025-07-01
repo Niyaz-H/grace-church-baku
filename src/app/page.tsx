@@ -44,6 +44,7 @@ import GlassmorphicCard from '@/components/ui/glassmorphic-card'
 import GlassmorphicButton from '@/components/ui/glassmorphic-button'
 import GlassmorphicBadge from '@/components/ui/glassmorphic-badge'
 import contactData from '@/data/contacts.json'
+import { useTranslation } from '@/contexts/LanguageContext'
 import LanguageSelector from '@/components/ui/language-selector'
 
 // Utility function to format dates consistently on server and client
@@ -329,6 +330,7 @@ interface NavigationProps {
 
 const Navigation: React.FC<NavigationProps> = ({ isOpen, setIsOpen }) => {
   const { theme, setTheme } = useTheme()
+  const { t } = useTranslation()
   const [scrolled, setScrolled] = useState(false)
   const [inHeroSection, setInHeroSection] = useState(true)
 
@@ -344,14 +346,14 @@ const Navigation: React.FC<NavigationProps> = ({ isOpen, setIsOpen }) => {
   }, [])
 
   const navItems = [
-    { name: 'Home', href: '#home' },
-    { name: 'Mission', href: '#mission' },
-    { name: 'Services', href: '#services' },
-    { name: 'Sermons', href: '#sermons' },
-    { name: 'Testimonials', href: '#community' },
-    { name: 'Events', href: '#events' },
-    { name: 'Needs', href: '#needs' },
-    { name: 'Contact', href: '#contact' }
+    { name: t('nav.home'), href: '#home' },
+    { name: t('nav.mission'), href: '#mission' },
+    { name: t('nav.services'), href: '#services' },
+    { name: t('nav.sermons'), href: '#sermons' },
+    { name: t('nav.testimonials'), href: '#community' },
+    { name: t('nav.events'), href: '#events' },
+    { name: t('nav.needs'), href: '#needs' },
+    { name: t('nav.contact'), href: '#contact' }
   ]
 
   const scrollToSection = (href: string) => {
@@ -456,6 +458,7 @@ const Navigation: React.FC<NavigationProps> = ({ isOpen, setIsOpen }) => {
 
 const HeroSection: React.FC = () => {
   const { scrollY } = useScroll()
+  const { t } = useTranslation()
   const y = useTransform(scrollY, [0, 500], [0, 150])
 
   return (
@@ -485,18 +488,7 @@ const HeroSection: React.FC = () => {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="text-5xl md:text-7xl font-bold text-white mb-6"
           >
-            Spreading the Light of Christ in{' '}
-            <span
-              className="font-bold"
-              style={{
-                background: 'linear-gradient(to right, hsl(221.2 83.2% 53.3%), hsl(262.1 83.3% 57.8%))',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text'
-              }}
-            >
-              Azerbaijan
-            </span>
+            {t('hero.title')}
           </motion.h1>
           
           <motion.p
@@ -505,7 +497,7 @@ const HeroSection: React.FC = () => {
             transition={{ duration: 0.8, delay: 0.4 }}
             className="text-xl md:text-2xl text-white/90 mb-8 leading-relaxed"
           >
-            {contactData.church.description.en}
+            {t('hero.description')}
           </motion.p>
 
           <motion.div
@@ -519,10 +511,10 @@ const HeroSection: React.FC = () => {
               variant="hero"
               className="text-lg px-8 py-6"
             >
-              Join Us Sunday
+              {t('hero.joinButton')}
             </Button>
             <Button size="lg" variant="outline" className="text-lg px-8 py-6 bg-white/10 backdrop-blur-sm border-white/20 text-white hover:bg-white/20 dark:hover:bg-black/30">
-              Watch Online
+              {t('hero.watchButton')}
             </Button>
           </motion.div>
         </motion.div>
@@ -553,6 +545,7 @@ const HeroSection: React.FC = () => {
 
 const ServiceTimesSection: React.FC = () => {
   const ref = useRef(null)
+  const { t } = useTranslation()
   const isInView = useInView(ref, { once: true })
 
 
@@ -567,10 +560,10 @@ const ServiceTimesSection: React.FC = () => {
           className="text-center mb-16"
         >
           <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
-            Service Times
+            {t('services.title')}
           </h2>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            {contactData.church.serviceTimes.en}
+            {t('services.subtitle')}
           </p>
         </motion.div>
 
@@ -587,14 +580,14 @@ const ServiceTimesSection: React.FC = () => {
                   <div className="w-16 h-16 bg-slate-100/50 dark:bg-white/10 backdrop-blur-xl rounded-full flex items-center justify-center mx-auto mb-4 border border-primary/20">
                     <Clock className="w-8 h-8 text-primary" />
                   </div>
-                  <h3 className="text-xl font-semibold text-foreground mb-4">{service.day.en}</h3>
+                  <h3 className="text-xl font-semibold text-foreground mb-4">{t(`services.${service.day.en.toLowerCase()}`)}</h3>
                   <div className="mb-4">
                     <p className="text-3xl font-bold text-primary">{service.time}</p>
                   </div>
                 </div>
                 <GlassmorphicButton variant="outline" className="w-full mt-auto flex items-center justify-center bg-gray-100/50 dark:bg-white/10 hover:bg-gray-200/50 dark:hover:bg-white/20">
                   <Calendar className="w-4 h-4 mr-2" />
-                  Add to Calendar
+                  {t('services.addToCalendar')}
                 </GlassmorphicButton>
               </GlassmorphicCard>
             </motion.div>
@@ -607,45 +600,46 @@ const ServiceTimesSection: React.FC = () => {
 
 const SermonsSection: React.FC = () => {
   const ref = useRef(null)
+  const { t } = useTranslation()
   const isInView = useInView(ref, { once: true })
   const [selectedSermon, setSelectedSermon] = useState<Sermon | null>(null)
 
-  const sermons: Sermon[] = [
+  const sermons: Sermon[] = React.useMemo(() => [
     {
       id: '1',
-      title: 'Walking in Faith',
-      speaker: 'Pastor John Smith',
+      title: t('sermons.walkingInFaithTitle'),
+      speaker: t('sermons.walkingInFaithSpeaker'),
       date: '2024-01-14',
       duration: '45:30',
       audioUrl: '/audio/sermon1.mp3',
       videoUrl: '/video/sermon1.mp4',
       thumbnail: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80',
-      description: 'Exploring what it means to trust God in uncertain times.',
+      description: t('sermons.walkingInFaithDescription'),
       tags: ['Faith', 'Trust', 'Spiritual Growth']
     },
     {
       id: '2',
-      title: 'The Power of Prayer',
-      speaker: 'Pastor Sarah Johnson',
+      title: t('sermons.powerOfPrayerTitle'),
+      speaker: t('sermons.powerOfPrayerSpeaker'),
       date: '2024-01-07',
       duration: '38:15',
       audioUrl: '/audio/sermon2.mp3',
       thumbnail: 'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80',
-      description: 'Understanding how prayer transforms our hearts and circumstances.',
+      description: t('sermons.powerOfPrayerDescription'),
       tags: ['Prayer', 'Spiritual Discipline', 'Relationship with God']
     },
     {
       id: '3',
-      title: 'Love in Action',
-      speaker: 'Pastor Michael Brown',
+      title: t('sermons.loveInActionTitle'),
+      speaker: t('sermons.loveInActionSpeaker'),
       date: '2023-12-31',
       duration: '42:20',
       audioUrl: '/audio/sermon3.mp3',
       thumbnail: 'https://images.unsplash.com/photo-1469474968028-56623f02e42e?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80',
-      description: 'How to demonstrate God\'s love through our daily actions.',
+      description: t('sermons.loveInActionDescription'),
       tags: ['Love', 'Service', 'Community']
     }
-  ]
+  ], [t])
 
   useEffect(() => {
     if (sermons.length > 0) {
@@ -664,10 +658,10 @@ const SermonsSection: React.FC = () => {
           className="text-center mb-16"
         >
           <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
-            Recent Sermons
+            {t('sermons.title')}
           </h2>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            Listen to inspiring messages that will strengthen your faith and encourage your walk with God.
+            {t('sermons.subtitle')}
           </p>
         </motion.div>
 
@@ -701,7 +695,7 @@ const SermonsSection: React.FC = () => {
 
           <div className="space-y-4">
             <h3 className="text-xl font-semibold text-foreground mb-4">
-              Sermon Library
+              {t('sermons.sermonLibrary')}
             </h3>
             {sermons.map((sermon, index) => (
               <motion.div
@@ -899,6 +893,7 @@ const TestimonialsSection: React.FC = () => {
 
 const EventsSection: React.FC = () => {
   const ref = useRef(null)
+  const { t } = useTranslation()
   const isInView = useInView(ref, { once: true })
   const [selectedCategory, setSelectedCategory] = useState('all')
   const [searchTerm, setSearchTerm] = useState('')
@@ -906,11 +901,11 @@ const EventsSection: React.FC = () => {
   const events: Event[] = [
     {
       id: '1',
-      title: 'Community Outreach Day',
+      title: t('events.communityOutreachTitle'),
       date: '2024-02-15',
       time: '9:00 AM',
       location: 'Baku City Center',
-      description: 'Join us as we serve our community through various outreach activities.',
+      description: t('events.communityOutreachDescription'),
       category: 'outreach',
       image: 'https://images.unsplash.com/photo-1559027615-cd4628902d4a?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80',
       registrationRequired: true,
@@ -918,11 +913,11 @@ const EventsSection: React.FC = () => {
     },
     {
       id: '2',
-      title: 'Youth Winter Retreat',
+      title: t('events.youthRetreatTitle'),
       date: '2024-02-22',
       time: '6:00 PM',
       location: 'Mountain Resort',
-      description: 'A weekend retreat for young people to grow in faith and fellowship.',
+      description: t('events.youthRetreatDescription'),
       category: 'youth',
       image: 'https://images.unsplash.com/photo-1515187029135-18ee286d815b?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80',
       registrationRequired: true,
@@ -930,11 +925,11 @@ const EventsSection: React.FC = () => {
     },
     {
       id: '3',
-      title: 'Marriage Enrichment Seminar',
+      title: t('events.marriageSeminarTitle'),
       date: '2024-03-01',
       time: '7:00 PM',
       location: 'Church Main Hall',
-      description: 'Strengthen your marriage with biblical principles and practical advice.',
+      description: t('events.marriageSeminarDescription'),
       category: 'family',
       image: 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80',
       registrationRequired: true,
@@ -942,11 +937,11 @@ const EventsSection: React.FC = () => {
     },
     {
       id: '4',
-      title: 'Easter Celebration Service',
+      title: t('events.easterServiceTitle'),
       date: '2024-03-31',
       time: '10:00 AM',
       location: 'Church Sanctuary',
-      description: 'Celebrate the resurrection of Jesus Christ with special music and message.',
+      description: t('events.easterServiceDescription'),
       category: 'worship',
       image: 'https://images.unsplash.com/photo-1490730141103-6cac27aaab94?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80',
       registrationRequired: false
@@ -954,11 +949,11 @@ const EventsSection: React.FC = () => {
   ]
 
   const categories = [
-    { value: 'all', label: 'All Events' },
-    { value: 'worship', label: 'Worship' },
-    { value: 'youth', label: 'Youth' },
-    { value: 'family', label: 'Family' },
-    { value: 'outreach', label: 'Outreach' }
+    { value: 'all', label: t('events.allEvents') },
+    { value: 'worship', label: t('events.worship') },
+    { value: 'youth', label: t('events.youth') },
+    { value: 'family', label: t('events.family') },
+    { value: 'outreach', label: t('events.outreach') }
   ]
 
   const filteredEvents = events.filter(event => {
@@ -979,10 +974,10 @@ const EventsSection: React.FC = () => {
           className="text-center mb-16"
         >
           <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
-            Upcoming Events
+            {t('events.title')}
           </h2>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            Join us for special events, workshops, and community gatherings throughout the year.
+            {t('events.subtitle')}
           </p>
         </motion.div>
 
@@ -992,7 +987,7 @@ const EventsSection: React.FC = () => {
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-700 dark:text-gray-300 w-5 h-5" />
                 <Input
-                  placeholder="Search events..."
+                  placeholder={t('events.searchPlaceholder')}
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="pl-10 w-64 backdrop-blur-xl bg-slate-100 dark:bg-black/20 border border-gray-300 dark:border-white/20 text-foreground placeholder:text-muted-foreground"
@@ -1064,12 +1059,12 @@ const EventsSection: React.FC = () => {
 
                   {event.registrationRequired && event.spotsAvailable && (
                     <p className="text-sm text-muted-foreground mb-4">
-                      {event.spotsAvailable} spots available
+                      {event.spotsAvailable} {t('events.spotsAvailable')}
                     </p>
                   )}
 
                   <GlassmorphicButton className="w-full">
-                    {event.registrationRequired ? 'Register Now' : 'Learn More'}
+                    {event.registrationRequired ? t('events.registerNow') : t('events.learnMore')}
                   </GlassmorphicButton>
                 </div>
               </GlassmorphicCard>
@@ -1081,10 +1076,10 @@ const EventsSection: React.FC = () => {
           <div className="text-center py-12">
             <Calendar className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
             <h3 className="text-xl font-semibold text-foreground mb-2">
-              No events found
+              {t('events.noEventsFound')}
             </h3>
             <p className="text-muted-foreground">
-              Try adjusting your search or filter criteria.
+              {t('events.noEventsDescription')}
             </p>
           </div>
         )}
@@ -1570,22 +1565,23 @@ const OurMissionSection: React.FC = () => {
 
 const NeedsSection: React.FC = () => {
   const ref = useRef(null)
+  const { t } = useTranslation()
   const isInView = useInView(ref, { once: true })
 
   const needs = [
     {
-      title: 'A Permanent Church Building',
-      description: 'We currently rent a space and often face requests to leave. A permanent building would provide stability for worship, Bible studies, and youth and children’s ministries.',
+      title: t('needs.buildingTitle'),
+      description: t('needs.buildingDescription'),
       icon: 'Church'
     },
     {
-      title: 'Protection for New Believers',
-      description: 'New believers often face persecution. Your prayers and support can help provide a safe and encouraging environment for them to grow in their faith.',
+      title: t('needs.protectionTitle'),
+      description: t('needs.protectionDescription'),
       icon: 'Shield'
     },
     {
-      title: 'Resources for Ministry',
-      description: 'We need resources to distribute more Bibles, train leaders, and support our missionary work across the country.',
+      title: t('needs.resourcesTitle'),
+      description: t('needs.resourcesDescription'),
       icon: 'BookOpen'
     }
   ]
@@ -1601,10 +1597,10 @@ const NeedsSection: React.FC = () => {
           className="text-center mb-16"
         >
           <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
-            Join Us in Prayer and Support
+            {t('needs.title')}
           </h2>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Your partnership is vital to our mission. Here are some of the key areas where you can make a difference.
+            {t('needs.subtitle')}
           </p>
         </motion.div>
 
@@ -1637,7 +1633,7 @@ const NeedsSection: React.FC = () => {
           className="text-center mt-16"
         >
           <Button size="lg" variant="hero" className="text-lg px-8 py-6">
-            Support Our Mission
+            {t('needs.supportButton')}
           </Button>
         </motion.div>
       </div>
