@@ -65,7 +65,7 @@ const AnimatedThemeToggle: React.FC<AnimatedThemeToggleProps> = ({ theme, setThe
       geometry.dispose()
       material.dispose()
     }
-  }, [])
+  }, [theme])
 
   useEffect(() => {
     if (sphereRef.current && rendererRef.current && sceneRef.current) {

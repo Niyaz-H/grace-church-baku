@@ -31,11 +31,6 @@ import {
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 
-// Utils function
-function cn(...classes: (string | undefined | null | false)[]): string {
-  return classes.filter(Boolean).join(' ')
-}
-
 // Glow component
 const Glow = ({ className, variant = "top" }: { className?: string; variant?: "top" | "center" | "bottom" }) => (
   <div className={cn("absolute w-full", variant === "top" && "top-0", variant === "center" && "top-[50%]", variant === "bottom" && "bottom-0", className)}>
@@ -218,7 +213,6 @@ export function GraceChurchWebsite() {
     visible: {
       y: 0,
       opacity: 1,
-      transition: { duration: 0.6, ease: "easeOut" },
     },
   }
 

@@ -71,11 +71,4 @@ body {
     border-color: var(--glass-border-light);
 }
 
-/* Force light backgrounds to work properly */
-.bg-white {
-    background-color: var(--background-light) !important;
-}
 
-.bg-gray-50 {
-    background-color: var(--background-light-alt) !important;
-}

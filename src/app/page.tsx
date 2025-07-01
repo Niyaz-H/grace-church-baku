@@ -5,9 +5,6 @@ import { motion, AnimatePresence, useScroll, useTransform, useInView } from 'fra
 import {
   Menu,
   X,
-  Sun,
-  Moon,
-  Monitor,
   Play,
   Pause,
   Download,
@@ -37,16 +34,10 @@ import {
   MessageCircle
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
-import { Badge } from '@/components/ui/badge'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Separator } from '@/components/ui/separator'
-import { Progress } from '@/components/ui/progress'
-import { Switch } from '@/components/ui/switch'
 import { Label } from '@/components/ui/label'
 import AnimatedThemeToggle from '@/components/ui/animated-theme-toggle'
 import GlassmorphicCard from '@/components/ui/glassmorphic-card'
@@ -62,6 +53,58 @@ const formatDate = (dateString: string): string => {
   const day = date.getDate().toString().padStart(2, '0')
   const year = date.getFullYear()
   return `${month}/${day}/${year}`
+}
+
+// Animated Link Component with sliding underline
+const AnimatedLink: React.FC<{
+  href: string
+  children: React.ReactNode
+  className?: string
+  target?: string
+  rel?: string
+}> = ({ href, children, className = '', target, rel }) => {
+  return (
+    <a
+      href={href}
+      target={target}
+      rel={rel}
+      className={`relative group hover:text-primary transition-colors duration-300 ${className}`}
+    >
+      {children}
+      <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full"></span>
+    </a>
+  )
+}
+
+// Theme-aware Google Maps Component
+const ThemeAwareMap: React.FC = () => {
+  const { theme } = useTheme()
+  const [isDark, setIsDark] = useState(false)
+
+  useEffect(() => {
+    const root = document.documentElement
+    const isDarkMode = root.classList.contains('dark')
+    setIsDark(isDarkMode)
+  }, [theme])
+
+  // Google Maps URLs for light and dark themes
+  const lightMapUrl = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d903.2459014642031!2d49.9472960168195!3d40.40563930381057!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x40306308cf474127%3A0x2144f4bbe4f35f7b!2sGrace%20Church%20Azerbaijan%20Baku!5e0!3m2!1sen!2spl!4v1751317739904!5m2!1sen!2spl"
+  const darkMapUrl = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d903.2459014642031!2d49.9472960168195!3d40.40563930381057!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x40306308cf474127%3A0x2144f4bbe4f35f7b!2sGrace%20Church%20Azerbaijan%20Baku!5e0!3m2!1sen!2spl!4v1751317739904!5m2!1sen!2spl&style=feature:all%7Celement:geometry%7Ccolor:0x212121&style=feature:all%7Celement:labels.icon%7Cvisibility:off&style=feature:all%7Celement:labels.text.fill%7Ccolor:0x757575&style=feature:all%7Celement:labels.text.stroke%7Ccolor:0x212121&style=feature:administrative%7Celement:geometry%7Ccolor:0x757575&style=feature:administrative.country%7Celement:labels.text.fill%7Ccolor:0x9e9e9e&style=feature:administrative.land_parcel%7Cvisibility:off&style=feature:administrative.locality%7Celement:labels.text.fill%7Ccolor:0xbdbdbd&style=feature:poi%7Celement:labels.text.fill%7Ccolor:0x757575&style=feature:poi.park%7Celement:geometry%7Ccolor:0x181818&style=feature:poi.park%7Celement:labels.text.fill%7Ccolor:0x616161&style=feature:poi.park%7Celement:labels.text.stroke%7Ccolor:0x1b1b1b&style=feature:road%7Celement:geometry.fill%7Ccolor:0x2c2c2c&style=feature:road%7Celement:labels.text.fill%7Ccolor:0x8a8a8a&style=feature:road.arterial%7Celement:geometry%7Ccolor:0x373737&style=feature:road.highway%7Celement:geometry%7Ccolor:0x3c3c3c&style=feature:road.highway.controlled_access%7Celement:geometry%7Ccolor:0x4e4e4e&style=feature:road.local%7Celement:labels.text.fill%7Ccolor:0x616161&style=feature:transit%7Celement:labels.text.fill%7Ccolor:0x757575&style=feature:water%7Celement:geometry%7Ccolor:0x000000&style=feature:water%7Celement:labels.text.fill%7Ccolor:0x3d3d3d"
+
+  return (
+    <div className="aspect-video bg-white/10 backdrop-blur-xl rounded-xl overflow-hidden">
+      <iframe
+        src={isDark ? darkMapUrl : lightMapUrl}
+        width="100%"
+        height="100%"
+        style={{ border: 0 }}
+        allowFullScreen
+        loading="lazy"
+        referrerPolicy="no-referrer-when-downgrade"
+        title="Grace Church Baku Location"
+      />
+    </div>
+  )
 }
 
 interface ThemeContextType {
@@ -117,13 +160,6 @@ const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
   )
 }
 
-interface ServiceTime {
-  id: string
-  name: string
-  time: string
-  timezone: string
-  description: string
-}
 
 interface Sermon {
   id: string
@@ -177,7 +213,6 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ sermon }) => {
   const [isPlaying, setIsPlaying] = useState(false)
   const [currentTime, setCurrentTime] = useState(0)
   const [duration, setDuration] = useState(0)
-  const [volume, setVolume] = useState(1)
   const [isMuted, setIsMuted] = useState(false)
   const audioRef = useRef<HTMLAudioElement>(null)
 
@@ -209,13 +244,6 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ sermon }) => {
     setIsPlaying(!isPlaying)
   }
 
-  const handleSeek = (value: number[]) => {
-    const audio = audioRef.current
-    if (!audio) return
-
-    audio.currentTime = value[0]
-    setCurrentTime(value[0])
-  }
 
   const formatTime = (time: number) => {
     const minutes = Math.floor(time / 60)
@@ -255,7 +283,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ sermon }) => {
         <div className="space-y-2">
           <div className="flex items-center space-x-2">
             <span className="text-xs text-muted-foreground">{formatTime(currentTime)}</span>
-            <div className="flex-1 bg-white/20 rounded-full h-2 backdrop-blur-xl">
+            <div className="flex-1 bg-gray-300/50 dark:bg-white/20 rounded-full h-2 backdrop-blur-xl">
               <div
                 className="bg-primary h-2 rounded-full transition-all duration-300"
                 style={{ width: `${(currentTime / duration) * 100}%` }}
@@ -317,11 +345,12 @@ const Navigation: React.FC<NavigationProps> = ({ isOpen, setIsOpen }) => {
 
   const navItems = [
     { name: 'Home', href: '#home' },
-    { name: 'About', href: '#about' },
+    { name: 'Mission', href: '#mission' },
     { name: 'Services', href: '#services' },
     { name: 'Sermons', href: '#sermons' },
+    { name: 'Testimonials', href: '#community' },
     { name: 'Events', href: '#events' },
-    { name: 'Community', href: '#community' },
+    { name: 'Needs', href: '#needs' },
     { name: 'Contact', href: '#contact' }
   ]
 
@@ -368,9 +397,10 @@ const Navigation: React.FC<NavigationProps> = ({ isOpen, setIsOpen }) => {
                 key={item.name}
                 whileHover={{ y: -2 }}
                 onClick={() => scrollToSection(item.href)}
-                className={`hover:text-primary transition-colors duration-200 font-medium ${getTextColor()}`}
+                className={`relative group hover:text-primary transition-colors duration-200 font-medium ${getTextColor()}`}
               >
                 {item.name}
+                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full"></span>
               </motion.button>
             ))}
           </div>
@@ -400,7 +430,7 @@ const Navigation: React.FC<NavigationProps> = ({ isOpen, setIsOpen }) => {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden bg-background"
+            className="md:hidden bg-background/95 backdrop-blur-md"
           >
             <div className="container mx-auto px-4 py-4">
               <div className="flex flex-col space-y-4">
@@ -409,9 +439,10 @@ const Navigation: React.FC<NavigationProps> = ({ isOpen, setIsOpen }) => {
                     key={item.name}
                     whileHover={{ x: 10 }}
                     onClick={() => scrollToSection(item.href)}
-                    className="text-left text-foreground hover:text-primary transition-colors duration-200 font-medium py-2"
+                    className="text-left text-white hover:text-primary transition-colors duration-200 font-medium py-2 relative group"
                   >
                     {item.name}
+                    <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full"></span>
                   </motion.button>
                 ))}
               </div>
@@ -454,7 +485,7 @@ const HeroSection: React.FC = () => {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="text-5xl md:text-7xl font-bold text-white mb-6"
           >
-            Welcome to{' '}
+            Spreading the Light of Christ in{' '}
             <span
               className="font-bold"
               style={{
@@ -464,7 +495,7 @@ const HeroSection: React.FC = () => {
                 backgroundClip: 'text'
               }}
             >
-              Grace Church
+              Azerbaijan
             </span>
           </motion.h1>
           
@@ -485,11 +516,12 @@ const HeroSection: React.FC = () => {
           >
             <Button
               size="lg"
-              className="text-lg px-8 py-6 bg-white hover:bg-white/90 dark:bg-gray-800 dark:hover:bg-gray-700 !text-black dark:!text-white"
+              variant="hero"
+              className="text-lg px-8 py-6"
             >
               Join Us Sunday
             </Button>
-            <Button size="lg" variant="outline" className="text-lg px-8 py-6 bg-white/10 backdrop-blur-sm border-white/20 text-white hover:bg-white/20">
+            <Button size="lg" variant="outline" className="text-lg px-8 py-6 bg-white/10 backdrop-blur-sm border-white/20 text-white hover:bg-white/20 dark:hover:bg-black/30">
               Watch Online
             </Button>
           </motion.div>
@@ -525,7 +557,7 @@ const ServiceTimesSection: React.FC = () => {
 
 
   return (
-    <section id="services" className="py-20 bg-gray-50 dark:bg-gray-800">
+    <section id="services" className="py-20 bg-muted">
       <div className="container mx-auto px-4">
         <motion.div
           ref={ref}
@@ -552,7 +584,7 @@ const ServiceTimesSection: React.FC = () => {
             >
               <GlassmorphicCard className="h-full p-6 flex flex-col">
                 <div className="text-center flex-1">
-                  <div className="w-16 h-16 bg-primary/20 backdrop-blur-xl rounded-full flex items-center justify-center mx-auto mb-4 border border-primary/30">
+                  <div className="w-16 h-16 bg-slate-100/50 dark:bg-white/10 backdrop-blur-xl rounded-full flex items-center justify-center mx-auto mb-4 border border-primary/20">
                     <Clock className="w-8 h-8 text-primary" />
                   </div>
                   <h3 className="text-xl font-semibold text-foreground mb-4">{service.day.en}</h3>
@@ -560,7 +592,7 @@ const ServiceTimesSection: React.FC = () => {
                     <p className="text-3xl font-bold text-primary">{service.time}</p>
                   </div>
                 </div>
-                <GlassmorphicButton variant="outline" className="w-full mt-auto flex items-center justify-center">
+                <GlassmorphicButton variant="outline" className="w-full mt-auto flex items-center justify-center bg-gray-100/50 dark:bg-white/10 hover:bg-gray-200/50 dark:hover:bg-white/20">
                   <Calendar className="w-4 h-4 mr-2" />
                   Add to Calendar
                 </GlassmorphicButton>
@@ -577,7 +609,6 @@ const SermonsSection: React.FC = () => {
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true })
   const [selectedSermon, setSelectedSermon] = useState<Sermon | null>(null)
-  const [loading, setLoading] = useState(false)
 
   const sermons: Sermon[] = [
     {
@@ -620,10 +651,10 @@ const SermonsSection: React.FC = () => {
     if (sermons.length > 0) {
       setSelectedSermon(sermons[0])
     }
-  }, [])
+  }, [sermons])
 
   return (
-    <section id="sermons" className="py-20 bg-white dark:bg-gray-900">
+    <section id="sermons" className="py-20 bg-background">
       <div className="container mx-auto px-4">
         <motion.div
           ref={ref}
@@ -714,7 +745,7 @@ const SermonsSection: React.FC = () => {
   )
 }
 
-const CommunitySection: React.FC = () => {
+const TestimonialsSection: React.FC = () => {
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true })
   const [currentTestimonial, setCurrentTestimonial] = useState(0)
@@ -722,26 +753,26 @@ const CommunitySection: React.FC = () => {
   const testimonials: Testimonial[] = [
     {
       id: '1',
-      name: 'Maria Aliyeva',
-      role: 'Community Member',
-      content: 'Grace Church has been a beacon of hope in my life. The community here is so welcoming and supportive.',
-      avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80',
-      rating: 5
-    },
-    {
-      id: '2',
-      name: 'David Mammadov',
-      role: 'Youth Leader',
-      content: 'The youth programs here have helped me grow not just in faith, but as a leader in my community.',
+      name: 'Rustam',
+      role: 'Church Member from Baku',
+      content: 'I was healed from a torn coronary artery despite no hope from doctors. Moved by this miracle, I accepted Christ, and my whole family followed. God&apos;s power is real!',
       avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80',
       rating: 5
     },
     {
+      id: '2',
+      name: 'Rovshan',
+      role: 'New Believer from Baku',
+      content: 'After accepting Christ, my father heard about Christianity and said, "Introduce me to Jesus." He was eager to learn more about this faith that changed my life.',
+      avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80',
+      rating: 5
+    },
+    {
       id: '3',
-      name: 'Sarah Hasanova',
-      role: 'Volunteer Coordinator',
-      content: 'Being part of Grace Church means being part of a family that truly cares for one another.',
-      avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80',
+      name: 'Ilkin',
+      role: 'Seeker from Lankaran',
+      content: 'I received a Bible and meet with the church often, asking many questions about faith. Sometimes I say, &quot;I hope I&apos;m not bothering you with all my questions,&quot; but my curiosity is drawing me closer to Christ.',
+      avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80',
       rating: 5
     }
   ]
@@ -763,7 +794,7 @@ const CommunitySection: React.FC = () => {
   }
 
   return (
-    <section id="community" className="py-20 bg-gray-50 dark:bg-gray-800">
+    <section id="community" className="py-20 bg-muted">
       <div className="container mx-auto px-4">
         <motion.div
           ref={ref}
@@ -773,7 +804,7 @@ const CommunitySection: React.FC = () => {
           className="text-center mb-16"
         >
           <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
-            Our Community
+            Lives Transformed
           </h2>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
             Hear from members of our church family about their experiences and how God is working in their lives.
@@ -794,7 +825,7 @@ const CommunitySection: React.FC = () => {
                 <Quote className="w-12 h-12 text-primary mx-auto mb-6" />
                 
                 <blockquote className="text-xl md:text-2xl text-foreground mb-8 leading-relaxed">
-                  "{testimonials[currentTestimonial].content}"
+                  &quot;{testimonials[currentTestimonial].content}&quot;
                 </blockquote>
 
                 <div className="flex items-center justify-center space-x-4">
@@ -839,14 +870,11 @@ const CommunitySection: React.FC = () => {
                   <motion.button
                     key={index}
                     onClick={() => setCurrentTestimonial(index)}
-                    className={`w-3 h-3 rounded-full transition-all duration-300 border ${
+                    className={`w-3 h-3 rounded-full transition-all duration-300 border-2 ${
                       index === currentTestimonial
                         ? 'bg-primary border-primary shadow-lg'
-                        : 'bg-white/50 border-gray-400 hover:bg-white/70 dark:bg-gray-400 dark:border-gray-300 dark:hover:bg-gray-300'
+                        : 'bg-gray-300 dark:bg-gray-400 border-gray-400 dark:border-gray-300 hover:bg-gray-400 dark:hover:bg-gray-300'
                     }`}
-                    style={{
-                      borderColor: index === currentTestimonial ? '' : 'rgba(0,0,0,0.2)'
-                    }}
                     whileHover={{ scale: 1.2 }}
                     whileTap={{ scale: 0.9 }}
                   />
@@ -941,7 +969,7 @@ const EventsSection: React.FC = () => {
   })
 
   return (
-    <section id="events" className="py-20 bg-white dark:bg-gray-900">
+    <section id="events" className="py-20 bg-background">
       <div className="container mx-auto px-4">
         <motion.div
           ref={ref}
@@ -962,12 +990,12 @@ const EventsSection: React.FC = () => {
           <div className="flex items-center space-x-4">
             <div className="relative">
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-600 dark:text-gray-400 w-5 h-5" />
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-700 dark:text-gray-300 w-5 h-5" />
                 <Input
                   placeholder="Search events..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10 w-64 backdrop-blur-xl bg-white/40 dark:bg-white/20 border border-white/30 text-gray-900 dark:text-gray-100 placeholder:text-gray-600 dark:placeholder:text-gray-400"
+                  className="pl-10 w-64 backdrop-blur-xl bg-slate-100 dark:bg-black/20 border border-gray-300 dark:border-white/20 text-foreground placeholder:text-muted-foreground"
                 />
               </div>
             </div>
@@ -976,10 +1004,10 @@ const EventsSection: React.FC = () => {
           <div className="flex items-center space-x-2">
             <Filter className="w-4 h-4 text-muted-foreground" />
             <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-              <SelectTrigger className="w-48 backdrop-blur-xl bg-white/20 border border-white/20">
+              <SelectTrigger className="w-48 backdrop-blur-xl bg-slate-100 dark:bg-black/20 border border-gray-300 dark:border-white/20">
                 <SelectValue />
               </SelectTrigger>
-              <SelectContent className="backdrop-blur-xl bg-white/90 dark:bg-black/90 border border-white/20 z-[100]">
+              <SelectContent className="backdrop-blur-xl bg-white dark:bg-black/90 border-gray-300 dark:border-white/20 z-[100]">
                 {categories.map((category) => (
                   <SelectItem key={category.value} value={category.value} className="hover:bg-white/20">
                     {category.label}
@@ -1126,7 +1154,7 @@ const ContactSection: React.FC = () => {
         subject: '',
         message: ''
       })
-    } catch (error) {
+    } catch {
       setSubmitStatus('error')
     } finally {
       setIsSubmitting(false)
@@ -1141,7 +1169,7 @@ const ContactSection: React.FC = () => {
   }
 
   return (
-    <section id="contact" className="py-20 bg-gray-50 dark:bg-gray-800">
+    <section id="contact" className="py-20 bg-muted">
       <div className="container mx-auto px-4">
         <motion.div
           ref={ref}
@@ -1154,7 +1182,7 @@ const ContactSection: React.FC = () => {
             Get in Touch
           </h2>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            We'd love to hear from you. Send us a message and we'll respond as soon as possible.
+            We&apos;d love to hear from you. Send us a message and we&apos;ll respond as soon as possible.
           </p>
         </motion.div>
 
@@ -1174,7 +1202,7 @@ const ContactSection: React.FC = () => {
                       id="name"
                       value={formData.name}
                       onChange={(e) => handleInputChange('name', e.target.value)}
-                      className={`backdrop-blur-xl bg-white/40 dark:bg-white/20 border border-gray-300 dark:border-white/20 text-gray-900 dark:text-gray-100 ${errors.name ? 'border-red-500' : ''}`}
+                      className={`backdrop-blur-xl bg-slate-100 dark:bg-white/20 border border-gray-300 dark:border-white/20 text-gray-900 dark:text-gray-100 ${errors.name ? 'border-red-500' : ''}`}
                     />
                     {errors.name && (
                       <p className="text-sm text-red-500 mt-1">{errors.name}</p>
@@ -1187,7 +1215,7 @@ const ContactSection: React.FC = () => {
                       type="email"
                       value={formData.email}
                       onChange={(e) => handleInputChange('email', e.target.value)}
-                      className={`backdrop-blur-xl bg-white/40 dark:bg-white/20 border border-gray-300 dark:border-white/20 text-gray-900 dark:text-gray-100 ${errors.email ? 'border-red-500' : ''}`}
+                      className={`backdrop-blur-xl bg-slate-100 dark:bg-white/20 border border-gray-300 dark:border-white/20 text-gray-900 dark:text-gray-100 ${errors.email ? 'border-red-500' : ''}`}
                     />
                     {errors.email && (
                       <p className="text-sm text-red-500 mt-1">{errors.email}</p>
@@ -1201,7 +1229,7 @@ const ContactSection: React.FC = () => {
                     id="phone"
                     value={formData.phone}
                     onChange={(e) => handleInputChange('phone', e.target.value)}
-                    className="backdrop-blur-xl bg-white/40 dark:bg-white/20 border border-gray-300 dark:border-white/20 text-gray-900 dark:text-gray-100"
+                    className="backdrop-blur-xl bg-slate-100 dark:bg-white/20 border border-gray-300 dark:border-white/20 text-gray-900 dark:text-gray-100"
                   />
                 </div>
 
@@ -1211,7 +1239,7 @@ const ContactSection: React.FC = () => {
                     id="subject"
                     value={formData.subject}
                     onChange={(e) => handleInputChange('subject', e.target.value)}
-                    className={`backdrop-blur-xl bg-white/40 dark:bg-white/20 border border-gray-300 dark:border-white/20 text-gray-900 dark:text-gray-100 ${errors.subject ? 'border-red-500' : ''}`}
+                    className={`backdrop-blur-xl bg-slate-100 dark:bg-white/20 border border-gray-300 dark:border-white/20 text-gray-900 dark:text-gray-100 ${errors.subject ? 'border-red-500' : ''}`}
                   />
                   {errors.subject && (
                     <p className="text-sm text-red-500 mt-1">{errors.subject}</p>
@@ -1225,7 +1253,7 @@ const ContactSection: React.FC = () => {
                     rows={5}
                     value={formData.message}
                     onChange={(e) => handleInputChange('message', e.target.value)}
-                    className={`backdrop-blur-xl bg-white/40 dark:bg-white/20 border border-gray-300 dark:border-white/20 text-gray-900 dark:text-gray-100 ${errors.message ? 'border-red-500' : ''}`}
+                    className={`backdrop-blur-xl bg-slate-100 dark:bg-white/20 border border-gray-300 dark:border-white/20 text-gray-900 dark:text-gray-100 ${errors.message ? 'border-red-500' : ''}`}
                   />
                   {errors.message && (
                     <p className="text-sm text-red-500 mt-1">{errors.message}</p>
@@ -1274,7 +1302,7 @@ const ContactSection: React.FC = () => {
               <h3 className="text-2xl font-bold text-foreground mb-6">Contact Information</h3>
               <div className="space-y-6">
                 <div className="flex items-start space-x-4">
-                  <div className="w-12 h-12 bg-primary/20 backdrop-blur-xl rounded-full flex items-center justify-center">
+                  <div className="w-12 h-12 bg-slate-100/50 dark:bg-white/10 backdrop-blur-xl rounded-full flex items-center justify-center">
                     <MapPin className="w-6 h-6 text-primary" />
                   </div>
                   <div>
@@ -1289,91 +1317,91 @@ const ContactSection: React.FC = () => {
                 <div className="h-px bg-white/20"></div>
 
                 <div className="flex items-start space-x-4">
-                  <div className="w-12 h-12 bg-primary/20 backdrop-blur-xl rounded-full flex items-center justify-center">
+                  <div className="w-12 h-12 bg-slate-100/50 dark:bg-white/10 backdrop-blur-xl rounded-full flex items-center justify-center">
                     <Phone className="w-6 h-6 text-primary" />
                   </div>
                   <div>
                     <h4 className="font-semibold text-foreground">Phone</h4>
-                    <a href={`tel:${contactData.church.phone}`} className="text-muted-foreground hover:text-primary transition-colors">
+                    <AnimatedLink href={`tel:${contactData.church.phone}`} className="text-muted-foreground">
                       {contactData.church.phone}
-                    </a>
+                    </AnimatedLink>
                   </div>
                 </div>
 
                 <div className="h-px bg-white/20"></div>
 
                 <div className="flex items-start space-x-4">
-                  <div className="w-12 h-12 bg-primary/20 backdrop-blur-xl rounded-full flex items-center justify-center">
+                  <div className="w-12 h-12 bg-slate-100/50 dark:bg-white/10 backdrop-blur-xl rounded-full flex items-center justify-center">
                     <Mail className="w-6 h-6 text-primary" />
                   </div>
                   <div>
                     <h4 className="font-semibold text-foreground">Email</h4>
-                    <a href={`mailto:${contactData.church.email}`} className="text-muted-foreground hover:text-primary transition-colors">
+                    <AnimatedLink href={`mailto:${contactData.church.email}`} className="text-muted-foreground">
                       {contactData.church.email}
-                    </a>
+                    </AnimatedLink>
                   </div>
                 </div>
 
                 <div className="h-px bg-white/20"></div>
 
                 <div className="flex items-start space-x-4">
-                  <div className="w-12 h-12 bg-primary/20 backdrop-blur-xl rounded-full flex items-center justify-center">
+                  <div className="w-12 h-12 bg-slate-100/50 dark:bg-white/10 backdrop-blur-xl rounded-full flex items-center justify-center">
                     <Youtube className="w-6 h-6 text-primary" />
                   </div>
                   <div>
                     <h4 className="font-semibold text-foreground">YouTube</h4>
-                    <a href={contactData.church.socialMedia.youtube.url} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary transition-colors">
+                    <AnimatedLink href={contactData.church.socialMedia.youtube.url} target="_blank" rel="noopener noreferrer" className="text-muted-foreground">
                       {contactData.church.socialMedia.youtube.name}
-                    </a>
+                    </AnimatedLink>
                   </div>
                 </div>
 
                 <div className="h-px bg-white/20"></div>
 
                 <div className="flex items-start space-x-4">
-                  <div className="w-12 h-12 bg-primary/20 backdrop-blur-xl rounded-full flex items-center justify-center">
+                  <div className="w-12 h-12 bg-slate-100/50 dark:bg-white/10 backdrop-blur-xl rounded-full flex items-center justify-center">
                     <Facebook className="w-6 h-6 text-primary" />
                   </div>
                   <div>
                     <h4 className="font-semibold text-foreground">Facebook</h4>
-                    <a href={contactData.church.socialMedia.facebook.url} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary transition-colors">
+                    <AnimatedLink href={contactData.church.socialMedia.facebook.url} target="_blank" rel="noopener noreferrer" className="text-muted-foreground">
                       {contactData.church.socialMedia.facebook.name}
-                    </a>
+                    </AnimatedLink>
                   </div>
                 </div>
 
                 <div className="h-px bg-white/20"></div>
 
                 <div className="flex items-start space-x-4">
-                  <div className="w-12 h-12 bg-primary/20 backdrop-blur-xl rounded-full flex items-center justify-center">
+                  <div className="w-12 h-12 bg-slate-100/50 dark:bg-white/10 backdrop-blur-xl rounded-full flex items-center justify-center">
                     <Instagram className="w-6 h-6 text-primary" />
                   </div>
                   <div>
                     <h4 className="font-semibold text-foreground">Instagram</h4>
-                    <a href={contactData.church.socialMedia.instagram.url} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary transition-colors">
+                    <AnimatedLink href={contactData.church.socialMedia.instagram.url} target="_blank" rel="noopener noreferrer" className="text-muted-foreground">
                       {contactData.church.socialMedia.instagram.name}
-                    </a>
+                    </AnimatedLink>
                   </div>
                 </div>
 
                 <div className="h-px bg-white/20"></div>
 
                 <div className="flex items-start space-x-4">
-                  <div className="w-12 h-12 bg-primary/20 backdrop-blur-xl rounded-full flex items-center justify-center">
+                  <div className="w-12 h-12 bg-slate-100/50 dark:bg-white/10 backdrop-blur-xl rounded-full flex items-center justify-center">
                     <MessageCircle className="w-6 h-6 text-primary" />
                   </div>
                   <div>
                     <h4 className="font-semibold text-foreground">TikTok</h4>
-                    <a href={contactData.church.socialMedia.tiktok.url} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary transition-colors">
+                    <AnimatedLink href={contactData.church.socialMedia.tiktok.url} target="_blank" rel="noopener noreferrer" className="text-muted-foreground">
                       {contactData.church.socialMedia.tiktok.name}
-                    </a>
+                    </AnimatedLink>
                   </div>
                 </div>
 
                 <div className="h-px bg-white/20"></div>
 
                 <div className="flex items-start space-x-4">
-                  <div className="w-12 h-12 bg-primary/20 backdrop-blur-xl rounded-full flex items-center justify-center">
+                  <div className="w-12 h-12 bg-slate-100/50 dark:bg-white/10 backdrop-blur-xl rounded-full flex items-center justify-center">
                     <Clock className="w-6 h-6 text-primary" />
                   </div>
                   <div>
@@ -1389,18 +1417,7 @@ const ContactSection: React.FC = () => {
             </GlassmorphicCard>
 
             <GlassmorphicCard className="p-6">
-              <div className="aspect-video bg-white/10 backdrop-blur-xl rounded-xl overflow-hidden">
-                <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d903.2459014642031!2d49.9472960168195!3d40.40563930381057!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x40306308cf474127%3A0x2144f4bbe4f35f7b!2sGrace%20Church%20Azerbaijan%20Baku!5e0!3m2!1sen!2spl!4v1751317739904!5m2!1sen!2spl"
-                  width="100%"
-                  height="100%"
-                  style={{ border: 0 }}
-                  allowFullScreen
-                  loading="lazy"
-                  referrerPolicy="no-referrer-when-downgrade"
-                  title="Grace Church Baku Location"
-                ></iframe>
-              </div>
+              <ThemeAwareMap />
             </GlassmorphicCard>
           </motion.div>
         </div>
@@ -1427,29 +1444,30 @@ const Footer: React.FC = () => {
           <div>
             <h4 className="font-semibold text-foreground mb-4">Quick Links</h4>
             <ul className="space-y-2 text-muted-foreground">
-              <li><a href="#home" className="hover:text-primary transition-colors">Home</a></li>
-              <li><a href="#about" className="hover:text-primary transition-colors">About</a></li>
-              <li><a href="#services" className="hover:text-primary transition-colors">Services</a></li>
-              <li><a href="#sermons" className="hover:text-primary transition-colors">Sermons</a></li>
+              <li><AnimatedLink href="#home">Home</AnimatedLink></li>
+              <li><AnimatedLink href="#about">About</AnimatedLink></li>
+              <li><AnimatedLink href="#services">Services</AnimatedLink></li>
+              <li><AnimatedLink href="#sermons">Sermons</AnimatedLink></li>
             </ul>
           </div>
 
           <div>
             <h4 className="font-semibold text-foreground mb-4">Ministries</h4>
             <ul className="space-y-2 text-muted-foreground">
-              <li><a href="#" className="hover:text-primary transition-colors">Youth Ministry</a></li>
-              <li><a href="#" className="hover:text-primary transition-colors">Children's Ministry</a></li>
-              <li><a href="#" className="hover:text-primary transition-colors">Women's Ministry</a></li>
-              <li><a href="#" className="hover:text-primary transition-colors">Men's Ministry</a></li>
+              <li><AnimatedLink href="#">Youth Ministry</AnimatedLink></li>
+              <li><AnimatedLink href="#">Children&apos;s Ministry</AnimatedLink></li>
+              <li><AnimatedLink href="#">Women&apos;s Ministry</AnimatedLink></li>
+              <li><AnimatedLink href="#">Men&apos;s Ministry</AnimatedLink></li>
             </ul>
           </div>
 
           <div>
             <h4 className="font-semibold text-foreground mb-4">Connect</h4>
             <ul className="space-y-2 text-muted-foreground">
-              <li>123 Faith Street, Baku</li>
-              <li>+994 12 345 6789</li>
-              <li>info@gracechurchbaku.org</li>
+              <li>{contactData.church.address.street}</li>
+              <li>{contactData.church.address.city}, {contactData.church.address.country}</li>
+              <li>{contactData.church.phone}</li>
+              <li>{contactData.church.email}</li>
             </ul>
           </div>
         </div>
@@ -1458,15 +1476,15 @@ const Footer: React.FC = () => {
 
         <div className="flex flex-col md:flex-row items-center justify-between">
           <p className="text-muted-foreground">
-            © 2024 Grace Church Baku. All rights reserved.
+            © 2025 Grace Church Baku. All rights reserved.
           </p>
           <div className="flex space-x-4 mt-4 md:mt-0">
-            <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
+            <AnimatedLink href="#" className="text-muted-foreground">
               Privacy Policy
-            </a>
-            <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
+            </AnimatedLink>
+            <AnimatedLink href="#" className="text-muted-foreground">
               Terms of Service
-            </a>
+            </AnimatedLink>
           </div>
         </div>
       </div>
@@ -1479,7 +1497,7 @@ const OurMissionSection: React.FC = () => {
   const isInView = useInView(ref, { once: true })
 
   return (
-    <section id="mission" className="py-20 bg-white dark:bg-gray-900">
+    <section id="mission" className="py-20 bg-background">
       <div className="container mx-auto px-4">
         <motion.div
           ref={ref}
@@ -1492,7 +1510,7 @@ const OurMissionSection: React.FC = () => {
             Our Mission
           </h2>
           <p className="text-xl text-muted-foreground max-w-4xl mx-auto leading-relaxed">
-            To share the gospel, disciple believers, and plant churches across Azerbaijan, trusting God's Word to transform lives.
+            To share the gospel, disciple believers, and plant churches across Azerbaijan, trusting God&apos;s Word to transform lives.
           </p>
         </motion.div>
 
@@ -1503,7 +1521,7 @@ const OurMissionSection: React.FC = () => {
             transition={{ duration: 0.8, delay: 0.1 }}
           >
             <GlassmorphicCard className="h-full p-8 text-center">
-              <div className="w-16 h-16 bg-primary/20 backdrop-blur-xl rounded-full flex items-center justify-center mx-auto mb-6 border border-primary/30">
+              <div className="w-16 h-16 bg-slate-100/50 dark:bg-white/10 backdrop-blur-xl rounded-full flex items-center justify-center mx-auto mb-6 border border-primary/20">
                 <MessageCircle className="w-8 h-8 text-primary" />
               </div>
               <h3 className="text-xl font-semibold text-foreground mb-4">Share the Gospel</h3>
@@ -1519,7 +1537,7 @@ const OurMissionSection: React.FC = () => {
             transition={{ duration: 0.8, delay: 0.2 }}
           >
             <GlassmorphicCard className="h-full p-8 text-center">
-              <div className="w-16 h-16 bg-primary/20 backdrop-blur-xl rounded-full flex items-center justify-center mx-auto mb-6 border border-primary/30">
+              <div className="w-16 h-16 bg-slate-100/50 dark:bg-white/10 backdrop-blur-xl rounded-full flex items-center justify-center mx-auto mb-6 border border-primary/20">
                 <User className="w-8 h-8 text-primary" />
               </div>
               <h3 className="text-xl font-semibold text-foreground mb-4">Disciple Believers</h3>
@@ -1535,7 +1553,7 @@ const OurMissionSection: React.FC = () => {
             transition={{ duration: 0.8, delay: 0.3 }}
           >
             <GlassmorphicCard className="h-full p-8 text-center">
-              <div className="w-16 h-16 bg-primary/20 backdrop-blur-xl rounded-full flex items-center justify-center mx-auto mb-6 border border-primary/30">
+              <div className="w-16 h-16 bg-slate-100/50 dark:bg-white/10 backdrop-blur-xl rounded-full flex items-center justify-center mx-auto mb-6 border border-primary/20">
                 <MapPin className="w-8 h-8 text-primary" />
               </div>
               <h3 className="text-xl font-semibold text-foreground mb-4">Plant Churches</h3>
@@ -1545,6 +1563,83 @@ const OurMissionSection: React.FC = () => {
             </GlassmorphicCard>
           </motion.div>
         </div>
+      </div>
+    </section>
+  )
+}
+
+const NeedsSection: React.FC = () => {
+  const ref = useRef(null)
+  const isInView = useInView(ref, { once: true })
+
+  const needs = [
+    {
+      title: 'A Permanent Church Building',
+      description: 'We currently rent a space and often face requests to leave. A permanent building would provide stability for worship, Bible studies, and youth and children’s ministries.',
+      icon: 'Church'
+    },
+    {
+      title: 'Protection for New Believers',
+      description: 'New believers often face persecution. Your prayers and support can help provide a safe and encouraging environment for them to grow in their faith.',
+      icon: 'Shield'
+    },
+    {
+      title: 'Resources for Ministry',
+      description: 'We need resources to distribute more Bibles, train leaders, and support our missionary work across the country.',
+      icon: 'BookOpen'
+    }
+  ]
+
+  return (
+    <section id="needs" className="py-20 bg-background">
+      <div className="container mx-auto px-4">
+        <motion.div
+          ref={ref}
+          initial={{ opacity: 0, y: 50 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.8 }}
+          className="text-center mb-16"
+        >
+          <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
+            Join Us in Prayer and Support
+          </h2>
+          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+            Your partnership is vital to our mission. Here are some of the key areas where you can make a difference.
+          </p>
+        </motion.div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {needs.map((need, index) => (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, y: 50 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.8, delay: index * 0.1 }}
+            >
+              <GlassmorphicCard className="h-full p-8 text-center">
+                <div className="w-16 h-16 bg-slate-100/50 dark:bg-white/10 backdrop-blur-xl rounded-full flex items-center justify-center mx-auto mb-6 border border-primary/20">
+                  {need.icon === 'Church' && <CheckCircle className="w-8 h-8 text-primary" />}
+                  {need.icon === 'Shield' && <CheckCircle className="w-8 h-8 text-primary" />}
+                  {need.icon === 'BookOpen' && <CheckCircle className="w-8 h-8 text-primary" />}
+                </div>
+                <h3 className="text-xl font-semibold text-foreground mb-4">{need.title}</h3>
+                <p className="text-muted-foreground">
+                  {need.description}
+                </p>
+              </GlassmorphicCard>
+            </motion.div>
+          ))}
+        </div>
+        <motion.div
+          initial={{ opacity: 0, y: 50 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.8, delay: 0.4 }}
+          className="text-center mt-16"
+        >
+          <Button size="lg" variant="hero" className="text-lg px-8 py-6">
+            Support Our Mission
+          </Button>
+        </motion.div>
       </div>
     </section>
   )
@@ -1561,8 +1656,9 @@ const GraceChurchWebsite: React.FC = () => {
         <OurMissionSection />
         <ServiceTimesSection />
         <SermonsSection />
-        <CommunitySection />
+        <TestimonialsSection />
         <EventsSection />
+        <NeedsSection />
         <ContactSection />
         <Footer />
       </div>

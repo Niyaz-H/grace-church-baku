@@ -35,9 +35,9 @@ const RevealCircle: React.FC<RevealCircleProps> = ({ isVisible, center, onComple
           style={{
             background: `radial-gradient(circle at ${center.x}px ${center.y}px, transparent 0%, transparent var(--radius), rgba(255,255,255,0.1) var(--radius))`,
           }}
-          initial={{ '--radius': '0px' } as any}
-          animate={{ '--radius': `${maxRadius}px` } as any}
-          exit={{ '--radius': '0px' } as any}
+          initial={{ '--radius': '0px' } as Record<string, string>}
+          animate={{ '--radius': `${maxRadius}px` } as Record<string, string>}
+          exit={{ '--radius': '0px' } as Record<string, string>}
           transition={{
             duration: 0.8,
             ease: "easeInOut"

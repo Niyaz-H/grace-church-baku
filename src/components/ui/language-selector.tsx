@@ -11,13 +11,11 @@ const languages = [
 const LanguageSelector = () => {
   const [isOpen, setIsOpen] = useState(false)
   const [selectedLanguage, setSelectedLanguage] = useState(languages[0])
-  const [scrolled, setScrolled] = useState(false)
   const [inHeroSection, setInHeroSection] = useState(true)
 
   useEffect(() => {
     const handleScroll = () => {
       const scrollY = window.scrollY
-      setScrolled(scrollY > 50)
       setInHeroSection(scrollY < window.innerHeight * 0.8)
     }
 
@@ -37,7 +35,7 @@ const LanguageSelector = () => {
     <div className="relative">
       <motion.button
         onClick={() => setIsOpen(!isOpen)}
-        className={`flex items-center space-x-2 px-3 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 transition-colors duration-300 ${getTextColor()}`}
+        className={`flex items-center space-x-2 px-3 py-2 rounded-full bg-white/10 dark:bg-black/10 backdrop-blur-md border border-white/20 dark:border-white/10 transition-colors duration-300 ${getTextColor()} hover:bg-white/20 dark:hover:bg-black/30`}
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
       >
@@ -59,7 +57,7 @@ const LanguageSelector = () => {
                   setSelectedLanguage(lang)
                   setIsOpen(false)
                 }}
-                className="w-full text-left px-4 py-2 hover:bg-white/30 dark:hover:bg-white/10 transition-colors text-gray-900 dark:text-gray-100"
+                className={`w-full text-left px-4 py-2 hover:bg-white/30 dark:hover:bg-white/10 transition-colors ${getTextColor()}`}
               >
                 {lang.name}
               </button>
