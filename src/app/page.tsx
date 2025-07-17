@@ -1232,7 +1232,7 @@ const ContactSection: React.FC = () => {
                 <GlassmorphicButton
                   type="submit"
                   variant="primary"
-                  className="w-full"
+                  className="w-full send-message-button"
                   disabled={isSubmitting}
                 >
                   {isSubmitting ? (

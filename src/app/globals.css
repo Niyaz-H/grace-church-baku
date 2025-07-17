@@ -186,4 +186,19 @@ input[type="range"]::-moz-range-thumb {
   background: hsl(var(--accent)) !important;
 }
 
+/* Timeline slider specific fixes */
+.bg-border {
+  background-color: hsl(var(--muted)) !important;
+}
+
+.bg-primary {
+  background-color: hsl(var(--primary)) !important;
+}
+
+/* Make sure timeline containers are visible */
+.flex-1.bg-border {
+  background-color: hsl(var(--muted)) !important;
+  border: 1px solid hsl(var(--border)) !important;
+}
+
 
