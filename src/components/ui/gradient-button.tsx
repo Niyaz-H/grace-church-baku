@@ -4,17 +4,17 @@ import React from 'react'
 import { motion } from 'framer-motion'
 import { cn } from '@/lib/utils'
 
-interface GlassmorphicButtonProps {
+interface GradientButtonProps {
   children: React.ReactNode
   className?: string
-  variant?: 'primary' | 'secondary' | 'outline' | 'ghost'
+  variant?: 'primary' | 'secondary'
   size?: 'sm' | 'md' | 'lg'
   onClick?: () => void
   disabled?: boolean
   type?: 'button' | 'submit' | 'reset'
 }
 
-const GlassmorphicButton: React.FC<GlassmorphicButtonProps> = ({ 
+const GradientButton: React.FC<GradientButtonProps> = ({ 
   children, 
   className, 
   variant = 'primary',
@@ -23,19 +23,17 @@ const GlassmorphicButton: React.FC<GlassmorphicButtonProps> = ({
   disabled = false,
   type = 'button'
 }) => {
-  const baseClasses = "backdrop-blur-xl rounded-xl font-medium transition-all duration-300 shadow-lg border flex items-center justify-center"
+  const baseClasses = "rounded-xl font-semibold transition-all duration-300 shadow-lg hover:shadow-xl flex items-center justify-center border-0"
   
   const variantClasses = {
-    primary: "bg-accent text-white border-0 hover:bg-accent/90 shadow-lg hover:shadow-xl",
-    secondary: "bg-secondary text-white border-0 hover:bg-secondary/90 shadow-lg hover:shadow-xl",
-    outline: "bg-white/20 text-white border-white/30 hover:bg-white/30 hover:border-white/50 shadow-lg hover:shadow-xl",
-    ghost: "bg-white/10 text-white border-white/20 hover:bg-white/20 hover:border-white/30 hover:shadow-lg"
+    primary: "gradient-button-primary",
+    secondary: "bg-white/20 backdrop-blur-sm text-white border border-white/30 hover:bg-white/30"
   }
   
   const sizeClasses = {
-    sm: "px-3 py-2 text-sm",
-    md: "px-4 py-3 text-base",
-    lg: "p-4 w-16 h-16"
+    sm: "px-4 py-2 text-sm",
+    md: "px-6 py-3 text-base",
+    lg: "px-8 py-4 text-lg"
   }
   
   const disabledClasses = disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer"
@@ -61,4 +59,4 @@ const GlassmorphicButton: React.FC<GlassmorphicButtonProps> = ({
   )
 }
 
-export default GlassmorphicButton
+export default GradientButton

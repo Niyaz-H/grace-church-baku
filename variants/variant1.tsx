@@ -236,7 +236,10 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ sermon }) => {
           <div className="space-y-2">
             <div className="flex items-center space-x-2">
               <span className="text-xs text-muted-foreground">{formatTime(currentTime)}</span>
-              <Progress value={(currentTime / duration) * 100} className="flex-1" />
+              <Progress
+                value={(currentTime / duration) * 100}
+                className="flex-1"
+              />
               <span className="text-xs text-muted-foreground">{formatTime(duration)}</span>
             </div>
           </div>
@@ -433,7 +436,7 @@ const HeroSection: React.FC = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="text-5xl md:text-7xl font-bold text-white mb-6"
+            className="text-5xl md:text-7xl font-bold text-primary-foreground mb-6"
           >
             Welcome to{' '}
             <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
@@ -445,7 +448,7 @@ const HeroSection: React.FC = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
-            className="text-xl md:text-2xl text-white/90 mb-8 leading-relaxed"
+            className="text-xl md:text-2xl text-primary-foreground/90 mb-8 leading-relaxed"
           >
             A community of faith, hope, and love in the heart of Baku. 
             Join us as we grow together in God's grace.
@@ -457,10 +460,17 @@ const HeroSection: React.FC = () => {
             transition={{ duration: 0.8, delay: 0.6 }}
             className="flex flex-col sm:flex-row gap-4 justify-center"
           >
-            <Button size="lg" className="text-lg px-8 py-6">
+            <Button
+              size="lg"
+              className="text-lg px-8 py-6 bg-accent hover:bg-accent/90 text-white border-0"
+            >
               Join Us Sunday
             </Button>
-            <Button size="lg" variant="outline" className="text-lg px-8 py-6 bg-white/10 backdrop-blur-sm border-white/20 text-white hover:bg-white/20">
+            <Button
+              size="lg"
+              variant="outline"
+              className="text-lg px-8 py-6 bg-white/10 hover:bg-white/20 text-white border-white/30"
+            >
               Watch Online
             </Button>
           </motion.div>
@@ -476,12 +486,12 @@ const HeroSection: React.FC = () => {
         <motion.div
           animate={{ y: [0, 10, 0] }}
           transition={{ duration: 2, repeat: Infinity }}
-          className="w-6 h-10 border-2 border-white/50 rounded-full flex justify-center"
+          className="w-6 h-10 border-2 border-primary-foreground/50 rounded-full flex justify-center"
         >
           <motion.div
             animate={{ y: [0, 12, 0] }}
             transition={{ duration: 2, repeat: Infinity }}
-            className="w-1 h-3 bg-white/70 rounded-full mt-2"
+            className="w-1 h-3 bg-primary-foreground/70 rounded-full mt-2"
           />
         </motion.div>
       </motion.div>

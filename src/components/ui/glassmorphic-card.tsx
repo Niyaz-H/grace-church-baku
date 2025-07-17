@@ -20,8 +20,8 @@ const GlassmorphicCard: React.FC<GlassmorphicCardProps> = ({
   return (
     <motion.div
       className={cn(
-        "backdrop-blur-xl bg-white/10 dark:bg-white/5 rounded-2xl shadow-2xl border border-white/20 dark:border-white/10",
-        hoverable && "transition-all duration-300 hover:bg-white/20 hover:dark:bg-white/10 hover:shadow-3xl hover:-translate-y-1",
+        "backdrop-blur-xl bg-background/10 rounded-2xl shadow-2xl border border-border/20",
+        hoverable && "transition-all duration-300 hover:bg-background/20 hover:shadow-3xl hover:-translate-y-1",
         onClick && "cursor-pointer",
         className
       )}

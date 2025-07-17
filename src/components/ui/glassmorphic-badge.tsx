@@ -19,9 +19,9 @@ const GlassmorphicBadge: React.FC<GlassmorphicBadgeProps> = ({
   
   const variantClasses = {
     default: "bg-primary/20 text-primary border-primary/30 hover:bg-primary/30 hover:border-primary/50",
-    secondary: "bg-white/20 text-foreground border-white/20 hover:bg-white/30 hover:border-white/30",
-    outline: "bg-white/10 text-foreground border-white/20 hover:bg-white/20 hover:border-white/30",
-    destructive: "bg-red-500/20 text-red-400 border-red-500/30 hover:bg-red-500/30 hover:border-red-500/50"
+    secondary: "bg-secondary/20 text-secondary-foreground border-secondary/30 hover:bg-secondary/30 hover:border-secondary/50",
+    outline: "bg-background/10 text-foreground border-border/20 hover:bg-background/20 hover:border-border/30",
+    destructive: "bg-destructive/20 text-destructive-foreground border-destructive/30 hover:bg-destructive/30 hover:border-destructive/50"
   }
 
   return (

@@ -131,7 +131,7 @@ const NewsletterSection = ({
             </svg>
           </div>
         )}
-        <h2 className="mb-6 text-xl/[1.1] font-extrabold tracking-tight text-white md:text-2xl/[1.1]">
+        <h2 className="mb-6 text-xl/[1.1] font-extrabold tracking-tight text-primary-foreground md:text-2xl/[1.1]">
           {title}
         </h2>
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -159,7 +159,7 @@ const NewsletterSection = ({
               </Button>
             </div>
             {formState.message && (
-              <p className={cn("mt-2 text-xs", formState.status === "error" ? "text-red-400" : "text-zinc-300")}>
+              <p className={cn("mt-2 text-xs", formState.status === "error" ? "text-destructive" : "text-muted-foreground")}>
                 {formState.message}
               </p>
             )}
@@ -295,7 +295,7 @@ export function GraceChurchWebsite() {
 
     return (
       <motion.div
-        className="bg-white/50 backdrop-blur-sm p-6 rounded-xl flex flex-col items-center text-center group hover:bg-white transition-colors duration-300"
+        className="bg-background/50 backdrop-blur-sm p-6 rounded-xl flex flex-col items-center text-center group hover:bg-background transition-colors duration-300"
         variants={{
           hidden: { opacity: 0, y: 20 },
           visible: {
@@ -441,11 +441,11 @@ export function GraceChurchWebsite() {
                 transition={{ duration: 0.7, delay: 0.6, ease: "easeOut" }}
                 className="flex flex-wrap gap-4"
               >
-                <Button size="lg" className="group">
+                <Button size="lg" className="group bg-accent hover:bg-accent/90 text-white border-0">
                   Join Us Sunday
                   <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                 </Button>
-                <Button size="lg" variant="outline" className="group">
+                <Button size="lg" variant="outline" className="group bg-white/10 hover:bg-white/20 text-white border-white/30">
                   <Play className="mr-2 h-4 w-4" />
                   Watch Online
                 </Button>

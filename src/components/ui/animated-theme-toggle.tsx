@@ -17,7 +17,6 @@ const AnimatedThemeToggle: React.FC<AnimatedThemeToggleProps> = ({ theme, setThe
   const sphereRef = useRef<THREE.Mesh | null>(null)
   const [isTransitioning, setIsTransitioning] = useState(false)
   const [showReveal, setShowReveal] = useState(false)
-  const [clickPosition, setClickPosition] = useState({ x: 0, y: 0 })
 
   useEffect(() => {
     if (!canvasRef.current) return
@@ -92,24 +91,11 @@ const AnimatedThemeToggle: React.FC<AnimatedThemeToggleProps> = ({ theme, setThe
     }
   }, [theme])
 
-  const toggleTheme = (event: React.MouseEvent) => {
+  const toggleTheme = () => {
     if (isTransitioning) return
     
-    // Get click position for reveal animation
-    const rect = event.currentTarget.getBoundingClientRect()
-    const x = rect.left + rect.width / 2
-    const y = rect.top + rect.height / 2
-    setClickPosition({ x, y })
-    setShowReveal(true)
-    
-    // Delay theme change to sync with animation
-    setTimeout(() => {
-      if (theme === 'dark') {
-        setTheme('light')
-      } else {
-        setTheme('dark')
-      }
-    }, 100)
+    // Simple theme toggle without complex animation
+    setTheme(theme === 'dark' ? 'light' : 'dark')
   }
 
   return (
@@ -199,7 +185,7 @@ const AnimatedThemeToggle: React.FC<AnimatedThemeToggleProps> = ({ theme, setThe
       
       <RevealCircle
         isVisible={showReveal}
-        center={clickPosition}
+        center={{ x: 0, y: 0 }}
         onComplete={() => setShowReveal(false)}
       />
     </>

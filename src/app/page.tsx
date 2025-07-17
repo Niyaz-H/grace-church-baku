@@ -33,7 +33,6 @@ import {
   Instagram,
   MessageCircle
 } from 'lucide-react'
-import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
@@ -43,6 +42,7 @@ import AnimatedThemeToggle from '@/components/ui/animated-theme-toggle'
 import GlassmorphicCard from '@/components/ui/glassmorphic-card'
 import GlassmorphicButton from '@/components/ui/glassmorphic-button'
 import GlassmorphicBadge from '@/components/ui/glassmorphic-badge'
+import GradientButton from '@/components/ui/gradient-button'
 import contactData from '@/data/contacts.json'
 import { useTranslation } from '@/contexts/LanguageContext'
 import LanguageSelector from '@/components/ui/language-selector'
@@ -270,27 +270,27 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ sermon }) => {
 
       <div className="space-y-6">
         <div className="flex items-center justify-center space-x-4">
-          <GlassmorphicButton variant="ghost" size="sm">
+          <GlassmorphicButton variant="ghost" size="sm" className="audio-player-button">
             <SkipBack className="w-4 h-4" />
           </GlassmorphicButton>
-          <GlassmorphicButton onClick={togglePlay} size="lg" className="rounded-full w-14 h-14">
+          <GlassmorphicButton onClick={togglePlay} size="lg" className="rounded-full w-14 h-14 audio-player-button">
             {isPlaying ? <Pause className="w-6 h-6" /> : <Play className="w-6 h-6" />}
           </GlassmorphicButton>
-          <GlassmorphicButton variant="ghost" size="sm">
+          <GlassmorphicButton variant="ghost" size="sm" className="audio-player-button">
             <SkipForward className="w-4 h-4" />
           </GlassmorphicButton>
         </div>
 
         <div className="space-y-2">
           <div className="flex items-center space-x-2">
-            <span className="text-xs text-muted-foreground">{formatTime(currentTime)}</span>
-            <div className="flex-1 bg-gray-300/50 dark:bg-white/20 rounded-full h-2 backdrop-blur-xl">
+            <span className="text-xs text-foreground">{formatTime(currentTime)}</span>
+            <div className="flex-1 bg-border rounded-full h-2">
               <div
                 className="bg-primary h-2 rounded-full transition-all duration-300"
                 style={{ width: `${(currentTime / duration) * 100}%` }}
               />
             </div>
-            <span className="text-xs text-muted-foreground">{formatTime(duration)}</span>
+            <span className="text-xs text-foreground">{formatTime(duration)}</span>
           </div>
         </div>
 
@@ -298,16 +298,17 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ sermon }) => {
           <GlassmorphicButton
             variant="ghost"
             size="sm"
+            className="audio-player-button"
             onClick={() => setIsMuted(!isMuted)}
           >
             {isMuted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
           </GlassmorphicButton>
           <div className="flex space-x-2">
-            <GlassmorphicButton variant="ghost" size="sm">
+            <GlassmorphicButton variant="ghost" size="sm" className="audio-player-button">
               <Download className="w-4 h-4 mr-2" />
               Download
             </GlassmorphicButton>
-            <GlassmorphicButton variant="ghost" size="sm" onClick={() => {
+            <GlassmorphicButton variant="ghost" size="sm" className="audio-player-button" onClick={() => {
               const player = document.querySelector('.sermon-player-card')
               if (player) {
                 player.requestFullscreen()
@@ -399,7 +400,7 @@ const Navigation: React.FC<NavigationProps> = ({ isOpen, setIsOpen }) => {
                 key={item.name}
                 whileHover={{ y: -2 }}
                 onClick={() => scrollToSection(item.href)}
-                className={`relative group hover:text-primary transition-colors duration-200 font-medium ${getTextColor()}`}
+                className={`relative group hover:text-primary transition-colors duration-200 font-medium cursor-pointer ${getTextColor()}`}
               >
                 {item.name}
                 <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full"></span>
@@ -413,14 +414,14 @@ const Navigation: React.FC<NavigationProps> = ({ isOpen, setIsOpen }) => {
             <AnimatedThemeToggle theme={theme} setTheme={setTheme} />
 
             {/* Mobile Menu Toggle */}
-            <Button
+            <GlassmorphicButton
               variant="ghost"
               size="sm"
               className="md:hidden"
               onClick={() => setIsOpen(!isOpen)}
             >
               {isOpen ? <X className={`w-6 h-6 ${getTextColor()}`} /> : <Menu className={`w-6 h-6 ${getTextColor()}`} />}
-            </Button>
+            </GlassmorphicButton>
           </div>
         </div>
       </div>
@@ -506,16 +507,15 @@ const HeroSection: React.FC = () => {
             transition={{ duration: 0.8, delay: 0.6 }}
             className="flex flex-col sm:flex-row gap-4 justify-center"
           >
-            <Button
-              size="lg"
-              variant="hero"
-              className="text-lg px-8 py-6"
-            >
+            <GradientButton variant="primary" size="lg">
               {t('hero.joinButton')}
-            </Button>
-            <Button size="lg" variant="outline" className="text-lg px-8 py-6 bg-white/10 backdrop-blur-sm border-white/20 text-white hover:bg-white/20 dark:hover:bg-black/30">
+            </GradientButton>
+            <GlassmorphicButton
+              variant="secondary"
+              className="text-lg px-8 py-6 h-auto min-h-[44px] font-medium text-white bg-white/20 backdrop-blur-sm border-white/30"
+            >
               {t('hero.watchButton')}
-            </Button>
+            </GlassmorphicButton>
           </motion.div>
         </motion.div>
       </div>
@@ -548,7 +548,6 @@ const ServiceTimesSection: React.FC = () => {
   const { t } = useTranslation()
   const isInView = useInView(ref, { once: true })
 
-
   return (
     <section id="services" className="py-20 bg-muted">
       <div className="container mx-auto px-4">
@@ -567,7 +566,7 @@ const ServiceTimesSection: React.FC = () => {
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
           {contactData.church.serviceTimes.schedule.map((service, index) => (
             <motion.div
               key={service.day.en}
@@ -577,7 +576,7 @@ const ServiceTimesSection: React.FC = () => {
             >
               <GlassmorphicCard className="h-full p-6 flex flex-col">
                 <div className="text-center flex-1">
-                  <div className="w-16 h-16 bg-slate-100/50 dark:bg-white/10 backdrop-blur-xl rounded-full flex items-center justify-center mx-auto mb-4 border border-primary/20">
+                  <div className="w-16 h-16 bg-card rounded-full flex items-center justify-center mx-auto mb-4 border-2 border-primary">
                     <Clock className="w-8 h-8 text-primary" />
                   </div>
                   <h3 className="text-xl font-semibold text-foreground mb-4">{t(`services.${service.day.en.toLowerCase()}`)}</h3>
@@ -585,10 +584,10 @@ const ServiceTimesSection: React.FC = () => {
                     <p className="text-3xl font-bold text-primary">{service.time}</p>
                   </div>
                 </div>
-                <GlassmorphicButton variant="outline" className="w-full mt-auto flex items-center justify-center bg-gray-100/50 dark:bg-white/10 hover:bg-gray-200/50 dark:hover:bg-white/20">
+                <GradientButton variant="primary" size="sm" className="w-full mt-auto">
                   <Calendar className="w-4 h-4 mr-2" />
                   {t('services.addToCalendar')}
-                </GlassmorphicButton>
+                </GradientButton>
               </GlassmorphicCard>
             </motion.div>
           ))}
@@ -985,12 +984,12 @@ const EventsSection: React.FC = () => {
           <div className="flex items-center space-x-4">
             <div className="relative">
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-700 dark:text-gray-300 w-5 h-5" />
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5" />
                 <Input
                   placeholder={t('events.searchPlaceholder')}
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10 w-64 backdrop-blur-xl bg-slate-100 dark:bg-black/20 border border-gray-300 dark:border-white/20 text-foreground placeholder:text-muted-foreground"
+                  className="pl-10 w-64 search-input"
                 />
               </div>
             </div>
@@ -999,10 +998,10 @@ const EventsSection: React.FC = () => {
           <div className="flex items-center space-x-2">
             <Filter className="w-4 h-4 text-muted-foreground" />
             <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-              <SelectTrigger className="w-48 backdrop-blur-xl bg-slate-100 dark:bg-black/20 border border-gray-300 dark:border-white/20">
+              <SelectTrigger className="w-48 bg-card border border-border text-foreground">
                 <SelectValue />
               </SelectTrigger>
-              <SelectContent className="backdrop-blur-xl bg-white dark:bg-black/90 border-gray-300 dark:border-white/20 z-[100]">
+              <SelectContent className="dropdown-menu backdrop-blur-xl z-[100]">
                 {categories.map((category) => (
                   <SelectItem key={category.value} value={category.value} className="hover:bg-white/20">
                     {category.label}
@@ -1063,9 +1062,9 @@ const EventsSection: React.FC = () => {
                     </p>
                   )}
 
-                  <GlassmorphicButton className="w-full">
+                  <GradientButton variant="primary" size="sm" className="w-full">
                     {event.registrationRequired ? t('events.registerNow') : t('events.learnMore')}
-                  </GlassmorphicButton>
+                  </GradientButton>
                 </div>
               </GlassmorphicCard>
             </motion.div>
@@ -1197,7 +1196,7 @@ const ContactSection: React.FC = () => {
                       id="name"
                       value={formData.name}
                       onChange={(e) => handleInputChange('name', e.target.value)}
-                      className={`backdrop-blur-xl bg-slate-100 dark:bg-white/20 border border-gray-300 dark:border-white/20 text-gray-900 dark:text-gray-100 ${errors.name ? 'border-red-500' : ''}`}
+                      className={`bg-input border border-border text-foreground placeholder:text-muted-foreground ${errors.name ? 'border-red-500' : ''}`}
                     />
                     {errors.name && (
                       <p className="text-sm text-red-500 mt-1">{errors.name}</p>
@@ -1210,7 +1209,7 @@ const ContactSection: React.FC = () => {
                       type="email"
                       value={formData.email}
                       onChange={(e) => handleInputChange('email', e.target.value)}
-                      className={`backdrop-blur-xl bg-slate-100 dark:bg-white/20 border border-gray-300 dark:border-white/20 text-gray-900 dark:text-gray-100 ${errors.email ? 'border-red-500' : ''}`}
+                      className={`bg-input border border-border text-foreground placeholder:text-muted-foreground ${errors.email ? 'border-red-500' : ''}`}
                     />
                     {errors.email && (
                       <p className="text-sm text-red-500 mt-1">{errors.email}</p>
@@ -1224,7 +1223,7 @@ const ContactSection: React.FC = () => {
                     id="phone"
                     value={formData.phone}
                     onChange={(e) => handleInputChange('phone', e.target.value)}
-                    className="backdrop-blur-xl bg-slate-100 dark:bg-white/20 border border-gray-300 dark:border-white/20 text-gray-900 dark:text-gray-100"
+                    className="bg-input border border-border text-foreground placeholder:text-muted-foreground"
                   />
                 </div>
 
@@ -1234,7 +1233,7 @@ const ContactSection: React.FC = () => {
                     id="subject"
                     value={formData.subject}
                     onChange={(e) => handleInputChange('subject', e.target.value)}
-                    className={`backdrop-blur-xl bg-slate-100 dark:bg-white/20 border border-gray-300 dark:border-white/20 text-gray-900 dark:text-gray-100 ${errors.subject ? 'border-red-500' : ''}`}
+                    className={`bg-input border border-border text-foreground placeholder:text-muted-foreground ${errors.subject ? 'border-red-500' : ''}`}
                   />
                   {errors.subject && (
                     <p className="text-sm text-red-500 mt-1">{errors.subject}</p>
@@ -1248,7 +1247,7 @@ const ContactSection: React.FC = () => {
                     rows={5}
                     value={formData.message}
                     onChange={(e) => handleInputChange('message', e.target.value)}
-                    className={`backdrop-blur-xl bg-slate-100 dark:bg-white/20 border border-gray-300 dark:border-white/20 text-gray-900 dark:text-gray-100 ${errors.message ? 'border-red-500' : ''}`}
+                    className={`bg-input border border-border text-foreground placeholder:text-muted-foreground ${errors.message ? 'border-red-500' : ''}`}
                   />
                   {errors.message && (
                     <p className="text-sm text-red-500 mt-1">{errors.message}</p>
@@ -1257,6 +1256,7 @@ const ContactSection: React.FC = () => {
 
                 <GlassmorphicButton
                   type="submit"
+                  variant="primary"
                   className="w-full"
                   disabled={isSubmitting}
                 >
@@ -1461,8 +1461,16 @@ const Footer: React.FC = () => {
             <ul className="space-y-2 text-muted-foreground">
               <li>{contactData.church.address.street}</li>
               <li>{contactData.church.address.city}, {contactData.church.address.country}</li>
-              <li>{contactData.church.phone}</li>
-              <li>{contactData.church.email}</li>
+              <li>
+                <a href={`tel:${contactData.church.phone}`} className="hover:text-primary transition-colors cursor-pointer">
+                  {contactData.church.phone}
+                </a>
+              </li>
+              <li>
+                <a href={`mailto:${contactData.church.email}`} className="hover:text-primary transition-colors cursor-pointer">
+                  {contactData.church.email}
+                </a>
+              </li>
             </ul>
           </div>
         </div>
@@ -1632,9 +1640,9 @@ const NeedsSection: React.FC = () => {
           transition={{ duration: 0.8, delay: 0.4 }}
           className="text-center mt-16"
         >
-          <Button size="lg" variant="hero" className="text-lg px-8 py-6">
+          <GradientButton variant="primary" size="lg" className="text-lg px-8 py-6 h-auto min-h-[44px] font-medium">
             {t('needs.supportButton')}
-          </Button>
+          </GradientButton>
         </motion.div>
       </div>
     </section>
