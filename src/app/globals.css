@@ -142,19 +142,48 @@ input[type="range"]::-moz-range-thumb {
   color: hsl(var(--foreground)) !important;
 }
 
-/* Timeslider track styling */
-.timeslider {
+/* Timeslider track styling - more specific */
+input[type="range"].timeslider,
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
   background: hsl(var(--muted)) !important;
-  height: 4px;
-  border-radius: 2px;
+  height: 4px !important;
+  border-radius: 2px !important;
+  width: 100% !important;
 }
 
-.timeslider::-webkit-slider-thumb {
+input[type="range"].timeslider::-webkit-slider-thumb,
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none !important;
+  appearance: none !important;
   background: hsl(var(--primary)) !important;
-  border-radius: 50%;
-  width: 16px;
-  height: 16px;
-  cursor: pointer;
+  border-radius: 50% !important;
+  width: 16px !important;
+  height: 16px !important;
+  cursor: pointer !important;
+  border: 2px solid hsl(var(--background)) !important;
+}
+
+input[type="range"].timeslider::-moz-range-thumb,
+input[type="range"]::-moz-range-thumb {
+  background: hsl(var(--primary)) !important;
+  border-radius: 50% !important;
+  width: 16px !important;
+  height: 16px !important;
+  cursor: pointer !important;
+  border: 2px solid hsl(var(--background)) !important;
+}
+
+/* Send Message button styling */
+.send-message-button {
+  background: hsl(var(--primary)) !important;
+  color: hsl(var(--primary-foreground)) !important;
+  border: none !important;
+}
+
+.send-message-button:hover {
+  background: hsl(var(--accent)) !important;
 }
 
 
