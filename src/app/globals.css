@@ -109,4 +109,52 @@ body {
   color: hsl(var(--foreground));
 }
 
+/* Audio Player specific styling */
+.audio-player-button {
+  color: hsl(var(--foreground)) !important;
+}
+
+.audio-player-button:hover {
+  color: hsl(var(--primary)) !important;
+}
+
+/* Timeslider styling */
+input[type="range"] {
+  background: hsl(var(--muted)) !important;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  background: hsl(var(--primary)) !important;
+  border: 1px solid hsl(var(--border)) !important;
+}
+
+input[type="range"]::-moz-range-thumb {
+  background: hsl(var(--primary)) !important;
+  border: 1px solid hsl(var(--border)) !important;
+}
+
+/* Light mode specific audio player fixes */
+:root .audio-player-button {
+  color: hsl(var(--foreground)) !important;
+}
+
+.dark .audio-player-button {
+  color: hsl(var(--foreground)) !important;
+}
+
+/* Timeslider track styling */
+.timeslider {
+  background: hsl(var(--muted)) !important;
+  height: 4px;
+  border-radius: 2px;
+}
+
+.timeslider::-webkit-slider-thumb {
+  background: hsl(var(--primary)) !important;
+  border-radius: 50%;
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
 
