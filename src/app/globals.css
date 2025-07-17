@@ -65,72 +65,48 @@ body {
     transition: background-color 0.5s, color 0.5s;
 }
 
-/* Glassmorphic backgrounds using CSS variables */
-.glass-bg-light {
-  background-color: hsl(var(--card)) !important;
+/* Fix glassmorphism colors while maintaining 60-30-10 rule */
+.glassmorphic {
+  background: hsl(var(--card) / 0.8);
   backdrop-filter: blur(12px);
+  border: 1px solid hsl(var(--border) / 0.5);
 }
 
-.glass-bg-secondary {
-  background-color: hsl(var(--secondary)) !important;
-  backdrop-filter: blur(12px);
+/* Hero section specific styling */
+.hero-section {
+  background: linear-gradient(135deg, hsl(var(--background)), hsl(var(--muted)));
 }
 
-.glass-bg-muted {
-  background-color: hsl(var(--muted)) !important;
-  backdrop-filter: blur(12px);
+/* Ensure glassmorphic cards use CSS variables */
+[class*="bg-white/10"], [class*="bg-white/20"] {
+  background-color: hsl(var(--card) / 0.1) !important;
 }
 
-/* Remove hardcoded white backgrounds */
-[class*="bg-white"] {
-  background-color: hsl(var(--background)) !important;
+[class*="bg-slate-100/50"] {
+  background-color: hsl(var(--muted) / 0.5) !important;
 }
 
-[class*="bg-slate-100"] {
-  background-color: hsl(var(--muted)) !important;
+.dark [class*="bg-white/10"], .dark [class*="bg-black/10"] {
+  background-color: hsl(var(--card) / 0.1) !important;
 }
 
-/* Ensure glassmorphic effects use CSS variables */
-[class*="bg-white/"], [class*="bg-black/"] {
-  background-color: hsl(var(--card)) !important;
-}
-
-.dark [class*="bg-white/"], .dark [class*="bg-black/"] {
-  background-color: hsl(var(--card)) !important;
-}
-
-/* Force browser-specific button gradient colors */
+/* Button color fixes without breaking glassmorphism */
 .gradient-button-primary {
-  background: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--accent)) 50%, hsl(var(--primary)) 100%) !important;
+  background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent))) !important;
   color: hsl(var(--primary-foreground)) !important;
 }
 
-.dark .gradient-button-primary {
-  background: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--accent)) 50%, hsl(var(--primary)) 100%) !important;
-  color: hsl(var(--primary-foreground)) !important;
+/* Form elements - fix without overriding glassmorphism */
+input, select, textarea {
+  background-color: hsl(var(--input));
+  border-color: hsl(var(--border));
+  color: hsl(var(--foreground));
 }
 
-/* Ensure consistent styling across all elements */
-* {
-  border-color: hsl(var(--border)) !important;
-}
-
-/* Fix search and form elements */
-.search-input, input, select, textarea {
-  background-color: hsl(var(--input)) !important;
-  border-color: hsl(var(--border)) !important;
-  color: hsl(var(--foreground)) !important;
-}
-
-.search-input::placeholder, input::placeholder, select::placeholder, textarea::placeholder {
-  color: hsl(var(--muted-foreground)) !important;
-}
-
-/* Fix dropdown and menu elements */
-.dropdown-menu, [role="menu"] {
-  background-color: hsl(var(--popover)) !important;
-  border-color: hsl(var(--border)) !important;
-  color: hsl(var(--foreground)) !important;
+/* Ensure proper color application */
+body {
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
 }
 
 

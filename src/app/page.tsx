@@ -486,7 +486,7 @@ const HeroSection: React.FC = () => {
             </GradientButton>
             <GlassmorphicButton
               variant="secondary"
-              className="text-lg px-8 py-6 h-auto min-h-[44px] font-medium text-white bg-white/20 backdrop-blur-sm border-white/30"
+              className="text-lg px-8 py-6 h-auto min-h-[44px] font-medium text-white bg-card/20 backdrop-blur-sm border-border/30"
             >
               {t('hero.watchButton')}
             </GlassmorphicButton>
