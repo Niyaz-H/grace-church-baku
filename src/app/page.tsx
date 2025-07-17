@@ -46,6 +46,11 @@ import GradientButton from '@/components/ui/gradient-button'
 import contactData from '@/data/contacts.json'
 import { useTranslation } from '@/contexts/LanguageContext'
 import LanguageSelector from '@/components/ui/language-selector'
+import dynamic from 'next/dynamic'
+
+const LeafletMap = dynamic(() => import('@/components/ui/leaflet-map'), {
+  ssr: false,
+})
 
 // Utility function to format dates consistently on server and client
 const formatDate = (dateString: string): string => {
@@ -74,37 +79,6 @@ const AnimatedLink: React.FC<{
       {children}
       <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full"></span>
     </a>
-  )
-}
-
-// Theme-aware Google Maps Component
-const ThemeAwareMap: React.FC = () => {
-  const { theme } = useTheme()
-  const [isDark, setIsDark] = useState(false)
-
-  useEffect(() => {
-    const root = document.documentElement
-    const isDarkMode = root.classList.contains('dark')
-    setIsDark(isDarkMode)
-  }, [theme])
-
-  // Google Maps URLs for light and dark themes
-  const lightMapUrl = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d903.2459014642031!2d49.9472960168195!3d40.40563930381057!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x40306308cf474127%3A0x2144f4bbe4f35f7b!2sGrace%20Church%20Azerbaijan%20Baku!5e0!3m2!1sen!2spl!4v1751317739904!5m2!1sen!2spl"
-  const darkMapUrl = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d903.2459014642031!2d49.9472960168195!3d40.40563930381057!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x40306308cf474127%3A0x2144f4bbe4f35f7b!2sGrace%20Church%20Azerbaijan%20Baku!5e0!3m2!1sen!2spl!4v1751317739904!5m2!1sen!2spl&style=feature:all%7Celement:geometry%7Ccolor:0x212121&style=feature:all%7Celement:labels.icon%7Cvisibility:off&style=feature:all%7Celement:labels.text.fill%7Ccolor:0x757575&style=feature:all%7Celement:labels.text.stroke%7Ccolor:0x212121&style=feature:administrative%7Celement:geometry%7Ccolor:0x757575&style=feature:administrative.country%7Celement:labels.text.fill%7Ccolor:0x9e9e9e&style=feature:administrative.land_parcel%7Cvisibility:off&style=feature:administrative.locality%7Celement:labels.text.fill%7Ccolor:0xbdbdbd&style=feature:poi%7Celement:labels.text.fill%7Ccolor:0x757575&style=feature:poi.park%7Celement:geometry%7Ccolor:0x181818&style=feature:poi.park%7Celement:labels.text.fill%7Ccolor:0x616161&style=feature:poi.park%7Celement:labels.text.stroke%7Ccolor:0x1b1b1b&style=feature:road%7Celement:geometry.fill%7Ccolor:0x2c2c2c&style=feature:road%7Celement:labels.text.fill%7Ccolor:0x8a8a8a&style=feature:road.arterial%7Celement:geometry%7Ccolor:0x373737&style=feature:road.highway%7Celement:geometry%7Ccolor:0x3c3c3c&style=feature:road.highway.controlled_access%7Celement:geometry%7Ccolor:0x4e4e4e&style=feature:road.local%7Celement:labels.text.fill%7Ccolor:0x616161&style=feature:transit%7Celement:labels.text.fill%7Ccolor:0x757575&style=feature:water%7Celement:geometry%7Ccolor:0x000000&style=feature:water%7Celement:labels.text.fill%7Ccolor:0x3d3d3d"
-
-  return (
-    <div className="aspect-video bg-white/10 backdrop-blur-xl rounded-xl overflow-hidden">
-      <iframe
-        src={isDark ? darkMapUrl : lightMapUrl}
-        width="100%"
-        height="100%"
-        style={{ border: 0 }}
-        allowFullScreen
-        loading="lazy"
-        referrerPolicy="no-referrer-when-downgrade"
-        title="Grace Church Baku Location"
-      />
-    </div>
   )
 }
 
@@ -1088,6 +1062,7 @@ const EventsSection: React.FC = () => {
 }
 
 const ContactSection: React.FC = () => {
+  const { theme } = useTheme()
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true })
   const [formData, setFormData] = useState<ContactFormData>({
@@ -1412,7 +1387,7 @@ const ContactSection: React.FC = () => {
             </GlassmorphicCard>
 
             <GlassmorphicCard className="p-6">
-              <ThemeAwareMap />
+              <LeafletMap theme={theme} />
             </GlassmorphicCard>
           </motion.div>
         </div>
